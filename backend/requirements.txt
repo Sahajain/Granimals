@@ -1,0 +1,36 @@
+# Web framework — like Django but lighter and faster
+fastapi==0.115.0
+
+# ASGI server — runs our FastAPI app (like gunicorn for Django)
+uvicorn[standard]==0.30.6
+
+# Database ORM — lets us write Python instead of raw SQL
+sqlalchemy==2.0.35
+
+# Database driver — connects SQLAlchemy to PostgreSQL specifically
+psycopg2-binary==2.9.9
+
+# Database migrations — tracks changes to our DB schema over time
+alembic==1.13.3
+
+# Data validation — makes sure incoming data is the right type/format
+pydantic==2.9.2
+pydantic-settings==2.5.2
+
+# Password hashing — never store plain text passwords!
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1             # bcrypt 5.x breaks passlib — keep at 4.0.1
+
+# JWT tokens — for login sessions
+python-jose[cryptography]==3.3.0
+
+# Parse form data (needed for login form)
+python-multipart==0.0.12
+
+# Testing framework
+pytest==8.3.3
+pytest-asyncio==0.24.0
+httpx==0.27.2   # test client for FastAPI
+
+# Environment variable loading
+python-dotenv==1.0.1

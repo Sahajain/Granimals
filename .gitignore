@@ -1,0 +1,32 @@
+# ─── Python ──────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+venv/
+.env               # SECRET — never commit!
+*.db               # SQLite test databases
+.pytest_cache/
+
+# ─── Node / Frontend ─────────────────────────────────────────────────
+node_modules/      # Auto-installed by npm — can always be regenerated
+dist/              # Production build output
+.env.local
+*.local
+
+# ─── Secrets (belt-and-suspenders) ───────────────────────────────────
+backend/.env
+frontend/.env
+*.pem
+*.key
+
+# ─── IDE ─────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+
+# ─── OS ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ─── Docker ──────────────────────────────────────────────────────────
+postgres_data/

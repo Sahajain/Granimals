@@ -1,0 +1,81 @@
+# docker-compose.yml — Runs the ENTIRE stack with one command:
+#   docker compose up
+#
+# Services:
+#   db       → PostgreSQL database
+#   backend  → FastAPI app (builds from ./backend/Dockerfile)
+#   frontend → React/Vite app (builds from ./frontend/Dockerfile)
+#
+# Networking:
+#   All services share the "app-network" → can call each other by service name
+#   e.g., backend connects to "db:5432" (not "localhost:5432")
+#
+# Ports exposed to your machine:
+#   4011  → frontend (React)
+#   4002  → backend (FastAPI)
+#   5432  → PostgreSQL
+
+version: "3.9"
+
+services:
+  # ── PostgreSQL Database ───────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: cms_db
+    environment:
+      POSTGRES_USER: cms_user
+      POSTGRES_PASSWORD: cms_pass
+      POSTGRES_DB: cms_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cms_user -d cms_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  # ── FastAPI Backend ───────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cms_backend
+    ports:
+      - "4002:4002"
+    environment:
+      DATABASE_URL: postgresql://cms_user:cms_pass@db:5432/cms_db
+      SECRET_KEY: ${SECRET_KEY:-change-me-in-production}
+      ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 30
+    depends_on:
+      db:
+        condition: service_healthy   # Wait for DB to be ready before starting
+    networks:
+      - app-network
+    command: >
+      sh -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 4002"
+
+  # ── React Frontend ────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cms_frontend
+    ports:
+      - "4011:80"      # Nginx serves the built React app on port 80 inside container
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+# ── Volumes & Networks ────────────────────────────────────────────────────
+volumes:
+  postgres_data:    # Data persists even when container restarts
+
+networks:
+  app-network:
+    driver: bridge
