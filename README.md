@@ -2,7 +2,6 @@
 
 A full-stack web application for managing customers — built as a technical assessment.
 
-![CI](https://github.com/YOUR_USERNAME/customer-management/actions/workflows/ci.yml/badge.svg)
 
 ---
 
@@ -218,14 +217,9 @@ JWTs allow horizontal scaling — any server can validate a token without a shar
 **Why UUIDs instead of sequential IDs?**
 Sequential IDs are guessable (attackers can enumerate resources). UUIDs are random and work in distributed systems.
 
-**Why a service layer?**
-Separating business logic (services/) from HTTP handling (routers/) makes code testable without making HTTP requests.
 
 **Why SQLite for tests?**
 Tests use an in-memory SQLite DB — no PostgreSQL installation needed in CI, each test gets a fresh database, and tests run in parallel without conflicts.
 
 ---
 
-## Author
-
-Built for Full Stack Developer Technical Assessment.
