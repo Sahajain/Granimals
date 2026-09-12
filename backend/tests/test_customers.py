@@ -1,14 +1,6 @@
-"""
-tests/test_customers.py — Tests for customer CRUD endpoints.
-
-Tests cover the full lifecycle: create → list → get → update → delete
-Also tests: unauthenticated access, search, pagination, 404 handling.
-"""
-
 import pytest
 
 
-# ── Helper ─────────────────────────────────────────────────────────────
 def create_customer(client, auth_headers, **overrides):
     """Create a customer and return the response JSON."""
     payload = {
@@ -24,7 +16,6 @@ def create_customer(client, auth_headers, **overrides):
     return res.json()
 
 
-# ── Unauthenticated Access ─────────────────────────────────────────────
 def test_list_customers_requires_auth(client):
     """Accessing customers without a token returns 401."""
     res = client.get("/api/customers")
@@ -37,7 +28,6 @@ def test_create_customer_requires_auth(client):
     assert res.status_code == 401
 
 
-# ── Create ─────────────────────────────────────────────────────────────
 def test_create_customer_success(client, auth_headers):
     """Creating a customer with valid data returns 201 and the customer."""
     res = client.post("/api/customers", json={
@@ -87,7 +77,6 @@ def test_create_customer_missing_name(client, auth_headers):
     assert res.status_code == 422
 
 
-# ── List ───────────────────────────────────────────────────────────────
 def test_list_customers_empty(client, auth_headers):
     """Listing when there are no customers returns empty paginated result."""
     res = client.get("/api/customers", headers=auth_headers)
@@ -150,7 +139,6 @@ def test_list_customers_pagination(client, auth_headers):
     assert len(res2.json()["items"]) == 1
 
 
-# ── Get One ────────────────────────────────────────────────────────────
 def test_get_customer_by_id(client, auth_headers):
     """Getting an existing customer by ID returns the customer."""
     created = create_customer(client, auth_headers)
@@ -166,7 +154,6 @@ def test_get_customer_not_found(client, auth_headers):
     assert res.status_code == 404
 
 
-# ── Update ─────────────────────────────────────────────────────────────
 def test_update_customer(client, auth_headers):
     """Updating a customer changes only the specified fields."""
     created = create_customer(client, auth_headers)
@@ -194,7 +181,6 @@ def test_update_customer_not_found(client, auth_headers):
     assert res.status_code == 404
 
 
-# ── Delete ─────────────────────────────────────────────────────────────
 def test_delete_customer(client, auth_headers):
     """Deleting a customer returns 204 and the customer no longer exists."""
     created = create_customer(client, auth_headers)

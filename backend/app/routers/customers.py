@@ -1,25 +1,3 @@
-"""
-routers/customers.py — Customer CRUD endpoints.
-
-All routes here require authentication (JWT token).
-The `get_current_active_user` dependency enforces this automatically.
-
-Endpoints:
-  GET    /api/customers           → List customers (search + filter + paginate)
-  GET    /api/customers/{id}      → Get one customer
-  POST   /api/customers           → Create a new customer
-  PUT    /api/customers/{id}      → Update a customer (partial)
-  DELETE /api/customers/{id}      → Delete a customer
-
-HTTP Status codes we use:
-  200 OK          → Successful GET/PUT
-  201 Created     → Successful POST (something was created)
-  204 No Content  → Successful DELETE (nothing to return)
-  400 Bad Request → Validation error or duplicate
-  404 Not Found   → Customer doesn't exist
-  401 Unauthorized→ No/invalid token
-"""
-
 from typing import Optional
 from uuid import UUID
 
@@ -34,7 +12,6 @@ from app.services import customer_service
 router = APIRouter(prefix="/api/customers", tags=["Customers"])
 
 
-# ── LIST: GET /api/customers ───────────────────────────────────────────
 @router.get("", response_model=CustomerListResponse)
 def list_customers(
     # Query params — these come from the URL: /api/customers?page=2&search=john
@@ -64,7 +41,6 @@ def list_customers(
     )
 
 
-# ── GET ONE: GET /api/customers/{id} ──────────────────────────────────
 @router.get("/{customer_id}", response_model=CustomerOut)
 def get_customer(
     customer_id: UUID,
@@ -81,7 +57,6 @@ def get_customer(
     return customer
 
 
-# ── CREATE: POST /api/customers ────────────────────────────────────────
 @router.post("", response_model=CustomerOut, status_code=status.HTTP_201_CREATED)
 def create_customer(
     customer_data: CustomerCreate,
@@ -103,7 +78,6 @@ def create_customer(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
 
-# ── UPDATE: PUT /api/customers/{id} ────────────────────────────────────
 @router.put("/{customer_id}", response_model=CustomerOut)
 def update_customer(
     customer_id: UUID,
@@ -134,7 +108,6 @@ def update_customer(
     return customer_service.update_customer(db, customer, update_data)
 
 
-# ── DELETE: DELETE /api/customers/{id} ─────────────────────────────────
 @router.delete("/{customer_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_customer(
     customer_id: UUID,

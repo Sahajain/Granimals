@@ -1,14 +1,3 @@
-"""
-schemas/customer.py — Pydantic schemas for Customer data.
-
-Pattern: we have separate schemas for Create, Update, and Response.
-This gives us fine-grained control:
-  - CustomerCreate: required fields only, all must be provided
-  - CustomerUpdate: all fields optional (PATCH-style — update only what's sent)
-  - CustomerOut:    what we return (includes computed/related fields)
-  - CustomerList:   paginated list response
-"""
-
 from datetime import datetime
 from typing import List, Literal, Optional
 from uuid import UUID
@@ -16,7 +5,6 @@ from uuid import UUID
 from pydantic import BaseModel, EmailStr, field_validator
 
 
-# ── Shared Base ────────────────────────────────────────────────────────
 # Fields common to both Create and Update schemas.
 # We inherit from this to avoid repeating ourselves (DRY principle).
 class CustomerBase(BaseModel):
@@ -29,7 +17,6 @@ class CustomerBase(BaseModel):
     # Literal["active", "inactive"] means only these 2 values are valid
 
 
-# ── Create a New Customer ──────────────────────────────────────────────
 class CustomerCreate(CustomerBase):
     """Required fields when creating a customer.
     
@@ -47,7 +34,6 @@ class CustomerCreate(CustomerBase):
         return v.strip()
 
 
-# ── Update a Customer ──────────────────────────────────────────────────
 class CustomerUpdate(CustomerBase):
     """All fields optional — only send what you want to change.
     
@@ -57,7 +43,6 @@ class CustomerUpdate(CustomerBase):
     pass  # Inherits all optional fields from CustomerBase — nothing to add
 
 
-# ── Response: What We Return ───────────────────────────────────────────
 class CustomerOut(BaseModel):
     """Full customer data returned in API responses."""
     id: UUID
@@ -74,7 +59,6 @@ class CustomerOut(BaseModel):
     model_config = {"from_attributes": True}
 
 
-# ── Paginated List Response ─────────────────────────────────────────────
 class CustomerListResponse(BaseModel):
     """Wraps a list of customers with pagination metadata.
     

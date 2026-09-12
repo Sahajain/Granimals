@@ -1,19 +1,3 @@
-"""
-routers/auth.py — Authentication endpoints.
-
-Endpoints:
-  POST /api/auth/register  → Create a new account
-  POST /api/auth/login     → Login and get a JWT token
-  GET  /api/auth/me        → Get the current logged-in user's info
-
-How login works step by step:
-  1. Client sends { email, password }
-  2. We find the user by email in the DB
-  3. We verify the password using bcrypt
-  4. If valid, we create a JWT token containing the user's ID
-  5. We return the token — client stores it and sends it with every future request
-"""
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session

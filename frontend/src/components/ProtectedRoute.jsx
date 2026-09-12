@@ -1,19 +1,3 @@
-/**
- * components/ProtectedRoute.jsx
- *
- * A wrapper component that checks: "Is the user logged in?"
- * - If YES  → render the page
- * - If NO   → redirect to /login
- * - Loading → show a spinner (while we verify saved token on startup)
- *
- * Usage in App.jsx:
- *   <Route path="/customers" element={
- *     <ProtectedRoute>
- *       <CustomerList />
- *     </ProtectedRoute>
- *   } />
- */
-
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 

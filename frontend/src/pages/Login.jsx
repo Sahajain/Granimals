@@ -1,18 +1,3 @@
-/**
- * pages/Login.jsx — Login & Register page.
- *
- * React concepts used:
- * - useState: tracks form fields + which tab is active (login/register)
- * - useNavigate: redirect after successful login
- * - useAuth: call login() from AuthContext
- * - Controlled form: every input value lives in React state
- *
- * Flow:
- *   User fills form → handleSubmit → authContext.login() / api.post('/register')
- *   → success → navigate('/customers')
- *   → error  → setError(message) → shows error banner
- */
-
 import { useState } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -39,13 +24,11 @@ export default function Login() {
   // If already logged in → redirect to customers
   if (user) return <Navigate to="/customers" replace />;
 
-  // ── Generic input handler ─────────────────────────────────────────
   const handleChange = (e) => {
     setError('');
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // ── Submit ────────────────────────────────────────────────────────
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');

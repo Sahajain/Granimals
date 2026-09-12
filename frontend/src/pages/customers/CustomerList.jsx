@@ -1,26 +1,8 @@
-/**
- * pages/customers/CustomerList.jsx — The main customer table page.
- *
- * Features:
- * - Live search (debounced 400ms so we don't hit API on every keystroke)
- * - Status filter dropdown
- * - Pagination (previous/next + page numbers)
- * - Delete with confirmation modal
- * - Loading skeleton + empty state
- * - Link to create/edit/view each customer
- *
- * React hooks used:
- * - useState: customers, pagination, search, filter, loading, error, delete modal
- * - useEffect: fetch customers when page/search/status changes
- * - useCallback: stable function reference for fetchCustomers
- */
-
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../api/client';
 import toast from 'react-hot-toast';
 
-// ── Status Badge Component ────────────────────────────────────────────
 function StatusBadge({ status }) {
   const map = {
     active:   'badge-active',
@@ -29,7 +11,6 @@ function StatusBadge({ status }) {
   return <span className={`badge ${map[status] || 'badge-inactive'}`}>{status}</span>;
 }
 
-// ── Confirm Delete Modal ──────────────────────────────────────────────
 function DeleteModal({ customer, onConfirm, onCancel, loading }) {
   if (!customer) return null;
   return (
@@ -56,11 +37,9 @@ function DeleteModal({ customer, onConfirm, onCancel, loading }) {
   );
 }
 
-// ── Main Component ────────────────────────────────────────────────────
 export default function CustomerList() {
   const navigate = useNavigate();
 
-  // ── State ─────────────────────────────────────────────────────────
   const [customers, setCustomers]   = useState([]);
   const [total, setTotal]           = useState(0);
   const [pages, setPages]           = useState(1);
@@ -77,7 +56,6 @@ export default function CustomerList() {
   const [deleting, setDeleting]       = useState(null);   // customer to delete
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  // ── Debounce Search ───────────────────────────────────────────────
   // Wait 400ms after user stops typing before triggering fetch.
   // Without this: every keystroke fires an API call.
   useEffect(() => {
@@ -88,7 +66,6 @@ export default function CustomerList() {
     return () => clearTimeout(timer);  // Cancel if user types again
   }, [search]);
 
-  // ── Fetch Customers ───────────────────────────────────────────────
   const fetchCustomers = useCallback(async () => {
     setLoading(true);
     setError('');
@@ -113,7 +90,6 @@ export default function CustomerList() {
     fetchCustomers();
   }, [fetchCustomers]);
 
-  // ── Delete ────────────────────────────────────────────────────────
   const handleDeleteConfirm = async () => {
     setDeleteLoading(true);
     try {
@@ -128,10 +104,8 @@ export default function CustomerList() {
     }
   };
 
-  // ── Render ────────────────────────────────────────────────────────
   return (
     <div>
-      {/* ── Page Header ─────────────────────────────────────────── */}
       <div style={{
         display: 'flex', justifyContent: 'space-between',
         alignItems: 'flex-start', marginBottom: 'var(--space-6)', flexWrap: 'wrap', gap: 'var(--space-4)',
@@ -147,7 +121,6 @@ export default function CustomerList() {
         </Link>
       </div>
 
-      {/* ── Search + Filter Bar ─────────────────────────────────── */}
       <div className="card" style={{ marginBottom: 'var(--space-4)', padding: 'var(--space-4)' }}>
         <div className="filter-bar">
           {/* Search */}
@@ -187,7 +160,6 @@ export default function CustomerList() {
         </div>
       </div>
 
-      {/* ── Error State ─────────────────────────────────────────── */}
       {error && (
         <div style={{
           background: 'var(--danger-light)', border: '1px solid var(--danger)',
@@ -201,7 +173,6 @@ export default function CustomerList() {
         </div>
       )}
 
-      {/* ── Table ───────────────────────────────────────────────── */}
       <div className="card" style={{ padding: 0 }}>
         {loading ? (
           /* Loading skeleton */
@@ -287,7 +258,6 @@ export default function CustomerList() {
           </div>
         )}
 
-        {/* ── Pagination ──────────────────────────────────────── */}
         {!loading && customers.length > 0 && (
           <div className="pagination" style={{ padding: 'var(--space-4) var(--space-6)' }}>
             <span className="pagination-info">
@@ -326,7 +296,6 @@ export default function CustomerList() {
         )}
       </div>
 
-      {/* ── Delete Confirmation Modal ────────────────────────────── */}
       <DeleteModal
         customer={deleting}
         onConfirm={handleDeleteConfirm}

@@ -1,27 +1,8 @@
-/**
- * pages/customers/CustomerForm.jsx — Create & Edit Customer form.
- *
- * Smart reuse: ONE component handles BOTH create and edit.
- * How? We check if `:id` is in the URL params.
- *   - /customers/new      → id is undefined → CREATE mode
- *   - /customers/abc/edit → id = "abc"      → EDIT mode
- *
- * Edit mode: on mount, fetch the existing customer data and pre-fill the form.
- * Create mode: form starts empty.
- *
- * React hooks:
- * - useParams: read :id from URL
- * - useState: form fields, errors, loading states
- * - useEffect: fetch customer data when in edit mode
- * - useNavigate: go back after save
- */
-
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../../api/client';
 import toast from 'react-hot-toast';
 
-// ── Form initial state ────────────────────────────────────────────────
 const EMPTY_FORM = {
   name: '',
   email: '',
@@ -41,7 +22,6 @@ export default function CustomerForm() {
   const [loading, setLoading]   = useState(false);    // submit loading
   const [fetching, setFetching] = useState(isEditing); // fetch loading (edit only)
 
-  // ── Fetch Existing Customer (Edit Mode) ───────────────────────────
   useEffect(() => {
     if (!isEditing) return;
 
@@ -69,7 +49,6 @@ export default function CustomerForm() {
     fetchCustomer();
   }, [id, isEditing, navigate]);
 
-  // ── Input Handler ─────────────────────────────────────────────────
   const handleChange = (e) => {
     const { name, value } = e.target;
     // For phone number, only allow digits
@@ -79,7 +58,6 @@ export default function CustomerForm() {
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
-  // ── Client-side Validation ────────────────────────────────────────
   const validate = () => {
     const newErrors = {};
     
@@ -106,7 +84,6 @@ export default function CustomerForm() {
     return Object.keys(newErrors).length === 0;  // true = valid
   };
 
-  // ── Submit ────────────────────────────────────────────────────────
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
@@ -144,7 +121,6 @@ export default function CustomerForm() {
     }
   };
 
-  // ── Render ────────────────────────────────────────────────────────
   if (fetching) {
     return (
       <div className="spinner-center">

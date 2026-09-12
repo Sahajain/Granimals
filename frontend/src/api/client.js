@@ -1,13 +1,3 @@
-/**
- * api/client.js — Axios instance configured for our backend.
- *
- * Concepts:
- * - axios.create() → creates a configured HTTP client (like a pre-stamped envelope)
- * - Interceptors → functions that run on every request/response automatically
- * - Request interceptor → adds Authorization header (JWT token) to every request
- * - Response interceptor → handles 401 errors globally (redirect to login)
- */
-
 import axios from 'axios';
 
 // Create a custom axios instance with our API's base URL
@@ -19,7 +9,6 @@ const api = axios.create({
   },
 });
 
-// ── Request Interceptor ──────────────────────────────────────────────
 // Runs BEFORE every request is sent.
 // We use it to attach the JWT token to every request automatically.
 //
@@ -38,7 +27,6 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// ── Response Interceptor ─────────────────────────────────────────────
 // Runs AFTER every response is received.
 // We use it to handle 401 (Unauthorized) errors globally.
 //

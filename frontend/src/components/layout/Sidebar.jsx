@@ -1,12 +1,3 @@
-/**
- * components/layout/Sidebar.jsx
- *
- * Left navigation sidebar.
- * - App branding
- * - Nav links (active state via NavLink)
- * - User info + Logout
- */
-
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 

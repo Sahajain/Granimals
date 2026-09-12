@@ -1,31 +1,13 @@
-/**
- * pages/customers/CustomerDetail.jsx — View a single customer's full details.
- *
- * Features:
- * - Fetches customer by :id from URL
- * - Shows all fields in a readable layout
- * - Edit button → navigates to edit form
- * - Delete button → confirmation modal → delete → back to list
- *
- * React hooks:
- * - useParams: get :id from URL
- * - useState: customer data, loading, error, delete modal
- * - useEffect: fetch on mount
- * - useNavigate: go back or to edit page
- */
-
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../../api/client';
 import toast from 'react-hot-toast';
 
-// ── Status Badge ──────────────────────────────────────────────────────
 function StatusBadge({ status }) {
   const map = { active: 'badge-active', inactive: 'badge-inactive' };
   return <span className={`badge ${map[status] || 'badge-inactive'}`}>{status}</span>;
 }
 
-// ── Detail Row ────────────────────────────────────────────────────────
 function DetailRow({ label, value }) {
   return (
     <div style={{
@@ -51,7 +33,6 @@ export default function CustomerDetail() {
   const [showDelete, setShowDelete] = useState(false);
   const [deleting, setDeleting]   = useState(false);
 
-  // ── Fetch ─────────────────────────────────────────────────────────
   useEffect(() => {
     const fetchCustomer = async () => {
       try {
@@ -70,7 +51,6 @@ export default function CustomerDetail() {
     fetchCustomer();
   }, [id]);
 
-  // ── Delete ────────────────────────────────────────────────────────
   const handleDelete = async () => {
     setDeleting(true);
     try {
@@ -83,12 +63,10 @@ export default function CustomerDetail() {
     }
   };
 
-  // ── Loading ───────────────────────────────────────────────────────
   if (loading) return (
     <div className="spinner-center"><div className="spinner spinner-lg" /></div>
   );
 
-  // ── Error ─────────────────────────────────────────────────────────
   if (error) return (
     <div style={{ textAlign: 'center', padding: 'var(--space-12)' }}>
       <h2 style={{ marginBottom: 'var(--space-2)' }}>{error}</h2>

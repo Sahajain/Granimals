@@ -1,21 +1,3 @@
-"""
-deps.py — FastAPI dependency functions.
-
-Dependencies are functions that FastAPI runs automatically before a route handler.
-They're used for:
-  1. get_db()          → Provide a DB session to every route that needs it
-  2. get_current_user() → Verify the JWT token and return the logged-in User object
-
-How to use in a route:
-    @router.get("/customers")
-    def list_customers(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
-        # `db` is a live DB session, ready to query
-        # `user` is the currently logged-in User object
-        ...
-
-FastAPI handles calling these functions for you — you never call get_db() yourself.
-"""
-
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
@@ -24,7 +6,6 @@ from app.database import get_db
 from app.core.security import decode_access_token
 from app.models.user import User
 
-# ── OAuth2 Scheme ──────────────────────────────────────────────────────
 # This tells FastAPI:
 #   "Tokens come from the Authorization header as: Bearer <token>"
 #   "If someone hits a protected route without a token, redirect them to /api/auth/login"

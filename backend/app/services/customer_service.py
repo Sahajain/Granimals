@@ -1,16 +1,3 @@
-"""
-services/customer_service.py — Business logic for customer operations.
-
-The Service layer sits between the Router and the Database:
-  Router → Service → Database
-
-Why separate from the router?
-  - Routers handle HTTP (request/response)
-  - Services handle LOGIC (the actual work)
-  - This makes services easy to test independently (no HTTP needed)
-  - Services can be reused by multiple routers or background tasks
-"""
-
 import math
 from typing import Optional
 from uuid import UUID
@@ -46,7 +33,6 @@ def get_customers(
     # Start with a base query — "SELECT * FROM customers"
     query = db.query(Customer)
 
-    # ── Search ─────────────────────────────────────────────────────────
     # or_() = SQL OR: WHERE name ILIKE '%term%' OR email ILIKE '%term%' OR company ILIKE '%term%'
     # ILIKE = case-insensitive LIKE (PostgreSQL specific)
     if search:
@@ -59,22 +45,18 @@ def get_customers(
             )
         )
 
-    # ── Filters ────────────────────────────────────────────────────────
     if status:
         query = query.filter(Customer.status == status)
 
     if company:
         query = query.filter(Customer.company.ilike(f"%{company}%"))
 
-    # ── Count total BEFORE pagination ───────────────────────────────────
     # We need total count to calculate number of pages
     total = query.count()
 
-    # ── Sort ───────────────────────────────────────────────────────────
     # Show newest customers first
     query = query.order_by(Customer.created_at.desc())
 
-    # ── Pagination ─────────────────────────────────────────────────────
     # OFFSET = skip the first N records
     # LIMIT  = return at most N records
     # Example: page=2, size=10 → skip 10, take 10 → rows 11-20

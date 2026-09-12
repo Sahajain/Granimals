@@ -1,17 +1,3 @@
-"""
-schemas/user.py — Pydantic schemas for User data.
-
-Schemas are different from SQLAlchemy models:
-  - SQLAlchemy Model (models/user.py) = maps to a database TABLE
-  - Pydantic Schema (schemas/user.py) = validates API REQUEST/RESPONSE data
-
-We have different schemas for different purposes:
-  - UserCreate  → what we accept when someone registers
-  - UserLogin   → what we accept when someone logs in
-  - UserOut     → what we send back (NEVER includes hashed_password!)
-  - Token       → the JWT token response after login
-"""
-
 from datetime import datetime
 from typing import Optional
 from uuid import UUID
@@ -19,7 +5,6 @@ from uuid import UUID
 from pydantic import BaseModel, EmailStr, field_validator
 
 
-# ── Register (Create Account) ──────────────────────────────────────────
 class UserCreate(BaseModel):
     """Data required to create a new user account."""
     email: EmailStr          # EmailStr validates it's a proper email format
@@ -42,7 +27,6 @@ class UserCreate(BaseModel):
         return v.strip()
 
 
-# ── Response: What We Return About a User ──────────────────────────────
 class UserOut(BaseModel):
     """Safe user data to return in API responses.
     
@@ -60,7 +44,6 @@ class UserOut(BaseModel):
     model_config = {"from_attributes": True}
 
 
-# ── JWT Token Response ─────────────────────────────────────────────────
 class Token(BaseModel):
     """What we return after a successful login."""
     access_token: str

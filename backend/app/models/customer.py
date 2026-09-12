@@ -1,11 +1,3 @@
-"""
-models/customer.py — The 'customers' table definition.
-
-Status values:
-  'active'   → Current customer, doing business
-  'inactive' → Past customer, no longer active
-"""
-
 import uuid
 from datetime import datetime
 
@@ -19,7 +11,6 @@ from app.database import Base
 class Customer(Base):
     __tablename__ = "customers"
 
-    # ── Primary Key ────────────────────────────────────────────────────
     id = Column(
         UUID(as_uuid=True),
         primary_key=True,
@@ -27,7 +18,6 @@ class Customer(Base):
         index=True,
     )
 
-    # ── Required Fields ────────────────────────────────────────────────
     name = Column(String(255), nullable=False)
 
     email = Column(
@@ -37,12 +27,10 @@ class Customer(Base):
         index=True,     # We'll search by email a lot, index makes it fast
     )
 
-    # ── Optional Fields ────────────────────────────────────────────────
     phone = Column(String(50), nullable=True)
     company = Column(String(255), nullable=True, index=True)  # Filter by company often
     notes = Column(Text, nullable=True)   # Free-form notes about the customer
 
-    # ── Status ─────────────────────────────────────────────────────────
     # 'active' | 'inactive'
     status = Column(
         String(50),
@@ -51,7 +39,6 @@ class Customer(Base):
         index=True,     # We'll filter by status a lot
     )
 
-    # ── Foreign Key: Who Created This Customer? ─────────────────────────
     # ForeignKey = a reference to another table's row
     # This column stores the UUID of the user who created this customer
     # ON DELETE SET NULL → if the user is deleted, don't delete their customers
@@ -61,7 +48,6 @@ class Customer(Base):
         nullable=True,
     )
 
-    # ── Timestamps ─────────────────────────────────────────────────────
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     # onupdate=datetime.utcnow → automatically updates whenever we save the row
@@ -72,7 +58,6 @@ class Customer(Base):
         nullable=False,
     )
 
-    # ── Relationship ───────────────────────────────────────────────────
     # The other side of the User.customers relationship
     # Lets us do: customer.created_by_user to get the User object
     created_by_user = relationship("User", back_populates="customers")

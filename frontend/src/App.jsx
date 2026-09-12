@@ -1,22 +1,3 @@
-/**
- * App.jsx — Root component: sets up routing and global providers.
- *
- * React Router Concepts:
- * - BrowserRouter  → enables URL-based routing (uses browser history API)
- * - Routes         → container for all Route definitions
- * - Route          → maps a URL path to a component
- * - Navigate       → programmatically redirect (like a redirect rule)
- * - Outlet         → renders the matched child route inside a layout
- *
- * Our Route Structure:
- *   /login                → Login page (public)
- *   /                     → ProtectedRoute → AppLayout (sidebar + topbar)
- *     /customers          → Customer list
- *     /customers/new      → Create customer form
- *     /customers/:id      → Customer detail
- *     /customers/:id/edit → Edit customer form
- */
-
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
@@ -54,10 +35,8 @@ export default function App() {
         />
 
         <Routes>
-          {/* ── Public Routes ──────────────────────────────────────── */}
           <Route path="/login" element={<Login />} />
 
-          {/* ── Protected Routes (require login) ───────────────────── */}
           {/* All routes inside AppLayout share the sidebar + topbar */}
           <Route
             path="/"

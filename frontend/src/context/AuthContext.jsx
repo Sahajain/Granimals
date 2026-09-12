@@ -1,23 +1,3 @@
-/**
- * context/AuthContext.jsx — Global authentication state.
- *
- * React Concepts:
- * - createContext()  → creates a "global store" for a piece of state
- * - useContext()     → lets any component READ from that global store
- * - Provider         → wraps the app, makes the context available to all children
- *
- * What we store:
- * - user        → the logged-in user object (or null)
- * - token       → the JWT token string (or null)
- * - isLoading   → true while we check if a saved token is valid
- * - login()     → call this when user submits login form
- * - logout()    → call this when user clicks logout
- *
- * Persistence:
- * We save the token to localStorage. So if you refresh the page,
- * you're still logged in (token is re-read on startup).
- */
-
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import api from '../api/client';
 
@@ -30,7 +10,6 @@ export function AuthProvider({ children }) {
   const [token, setToken]       = useState(null);
   const [isLoading, setIsLoading] = useState(true); // true until we verify saved token
 
-  // ── On App Start: Check for Saved Token ───────────────────────────
   // useEffect with [] runs ONCE when the component mounts (app starts)
   // We check localStorage for a saved token and validate it with the backend
   useEffect(() => {
@@ -60,7 +39,6 @@ export function AuthProvider({ children }) {
     initAuth();
   }, []);
 
-  // ── Login ─────────────────────────────────────────────────────────
   const login = useCallback(async (email, password) => {
     // The login endpoint expects FORM data (not JSON) — this is OAuth2 standard
     const formData = new URLSearchParams();
@@ -85,7 +63,6 @@ export function AuthProvider({ children }) {
     localStorage.setItem('user', JSON.stringify(meResponse.data));
   }, []);
 
-  // ── Logout ────────────────────────────────────────────────────────
   const logout = useCallback(() => {
     setToken(null);
     setUser(null);

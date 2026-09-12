@@ -1,26 +1,3 @@
-"""
-core/security.py — Password hashing and JWT token logic.
-
-Two concepts here:
-
-1. PASSWORD HASHING (bcrypt)
-   - When a user registers: we hash their password → store the hash
-   - When a user logs in: we hash what they typed → compare with stored hash
-   - The hash is ONE-WAY: you can't reverse it to get the original password
-   - Even if the DB leaks, attackers can't recover passwords
-
-2. JWT TOKENS (JSON Web Token)
-   - When login succeeds, we give the user a "token" (a long string)
-   - Every future request includes this token in the header
-   - We verify the token on every protected route to confirm who the user is
-   - The token has an expiry — after 30 minutes, they need to log in again
-   
-   JWT structure: header.payload.signature
-   - header: algorithm used
-   - payload: the data (user_id, expiry)
-   - signature: proves the token wasn't tampered with
-"""
-
 from datetime import datetime, timedelta
 from typing import Optional
 
@@ -29,7 +6,6 @@ from passlib.context import CryptContext
 
 from app.core.config import settings
 
-# ── Password Hashing ───────────────────────────────────────────────────
 # CryptContext sets up bcrypt as our hashing algorithm
 # bcrypt automatically adds a "salt" (random data) to prevent rainbow table attacks
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -53,7 +29,6 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 
-# ── JWT Tokens ─────────────────────────────────────────────────────────
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     """Create a JWT access token containing the given data.

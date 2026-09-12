@@ -1,17 +1,3 @@
-"""
-tests/test_auth.py — Tests for authentication endpoints.
-
-Test naming convention: test_<what>_<expected_result>
-Example: test_register_returns_201 → "register should return 201"
-
-Each test:
-1. Calls an API endpoint using TestClient
-2. Asserts the response status code
-3. Asserts specific fields in the response body
-"""
-
-
-# ── Registration Tests ─────────────────────────────────────────────────
 def test_register_success(client):
     """Registering with valid data returns 201 and user object."""
     res = client.post("/api/auth/register", json={
@@ -56,7 +42,6 @@ def test_register_short_password(client):
     assert res.status_code == 422
 
 
-# ── Login Tests ────────────────────────────────────────────────────────
 def test_login_success(client):
     """Valid login returns JWT token."""
     # First register
@@ -102,7 +87,6 @@ def test_login_nonexistent_user(client):
     assert res.status_code == 401
 
 
-# ── /me Tests ──────────────────────────────────────────────────────────
 def test_get_me(client, auth_headers):
     """GET /me with valid token returns current user."""
     res = client.get("/api/auth/me", headers=auth_headers)
