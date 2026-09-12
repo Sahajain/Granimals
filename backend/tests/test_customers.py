@@ -124,8 +124,8 @@ def test_list_customers_search(client, auth_headers):
 def test_list_customers_filter_by_status(client, auth_headers):
     """Filter by status returns only matching customers."""
     create_customer(client, auth_headers, email="active@test.com", status="active")
-    create_customer(client, auth_headers, email="inactive@test.com", status="inactive")
-    create_customer(client, auth_headers, email="prospect@test.com", status="prospect")
+    create_customer(client, auth_headers, email="inactive1@test.com", status="inactive")
+    create_customer(client, auth_headers, email="inactive2@test.com", status="inactive")
 
     res = client.get("/api/customers?status=active", headers=auth_headers)
     data = res.json()

@@ -21,10 +21,16 @@ app = FastAPI(
 )
 
 # ── CORS Middleware ───────────────────────────────────────────────────
-# Allows our React frontend (localhost:5173) to call this API (localhost:8000)
+# Allows our React frontend to call this API regardless of the exact port Vite picks
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4011"],  # React dev server (port 4011)
+    allow_origins=[
+        "http://localhost:4010",
+        "http://localhost:4011",
+        "http://localhost:4012",
+        "http://localhost:5173",
+        "http://localhost:5174"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

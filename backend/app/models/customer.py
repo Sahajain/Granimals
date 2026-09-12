@@ -1,12 +1,9 @@
 """
 models/customer.py — The 'customers' table definition.
 
-This is our core business table. Everything in the app revolves around this.
-
 Status values:
   'active'   → Current customer, doing business
-  'inactive' → Past customer, no longer active  
-  'prospect' → Potential customer, not yet converted
+  'inactive' → Past customer, no longer active
 """
 
 import uuid
@@ -46,7 +43,7 @@ class Customer(Base):
     notes = Column(Text, nullable=True)   # Free-form notes about the customer
 
     # ── Status ─────────────────────────────────────────────────────────
-    # 'active' | 'inactive' | 'prospect'
+    # 'active' | 'inactive'
     status = Column(
         String(50),
         default="active",

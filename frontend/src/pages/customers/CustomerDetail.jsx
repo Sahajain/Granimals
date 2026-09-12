@@ -21,7 +21,7 @@ import toast from 'react-hot-toast';
 
 // ── Status Badge ──────────────────────────────────────────────────────
 function StatusBadge({ status }) {
-  const map = { active: 'badge-active', inactive: 'badge-inactive', prospect: 'badge-prospect' };
+  const map = { active: 'badge-active', inactive: 'badge-inactive' };
   return <span className={`badge ${map[status] || 'badge-inactive'}`}>{status}</span>;
 }
 
@@ -91,10 +91,9 @@ export default function CustomerDetail() {
   // ── Error ─────────────────────────────────────────────────────────
   if (error) return (
     <div style={{ textAlign: 'center', padding: 'var(--space-12)' }}>
-      <div style={{ fontSize: '3rem', marginBottom: 'var(--space-4)' }}>😕</div>
       <h2 style={{ marginBottom: 'var(--space-2)' }}>{error}</h2>
       <Link to="/customers" className="btn btn-secondary" style={{ marginTop: 'var(--space-4)' }}>
-        ← Back to Customers
+        Back to Customers
       </Link>
     </div>
   );
@@ -125,10 +124,10 @@ export default function CustomerDetail() {
 
           <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
             <Link to={`/customers/${id}/edit`} className="btn btn-secondary">
-              ✏️ Edit
+              Edit
             </Link>
             <button className="btn btn-danger" onClick={() => setShowDelete(true)}>
-              🗑️ Delete
+              Delete
             </button>
           </div>
         </div>
@@ -179,7 +178,7 @@ export default function CustomerDetail() {
                 Cancel
               </button>
               <button onClick={handleDelete} className="btn btn-danger" disabled={deleting}>
-                {deleting ? <><div className="spinner" style={{ width: 14, height: 14 }} /> Deleting...</> : '🗑️ Delete'}
+              {deleting ? <><div className="spinner" style={{ width: 14, height: 14 }} /> Deleting...</> : 'Delete'}
               </button>
             </div>
           </div>

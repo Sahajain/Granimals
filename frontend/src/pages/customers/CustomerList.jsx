@@ -25,7 +25,6 @@ function StatusBadge({ status }) {
   const map = {
     active:   'badge-active',
     inactive: 'badge-inactive',
-    prospect: 'badge-prospect',
   };
   return <span className={`badge ${map[status] || 'badge-inactive'}`}>{status}</span>;
 }
@@ -38,10 +37,10 @@ function DeleteModal({ customer, onConfirm, onCancel, loading }) {
       <div className="modal" style={{ maxWidth: 400 }} onClick={e => e.stopPropagation()}>
         <div className="modal-header">
           <h2 className="modal-title">Delete Customer</h2>
-          <button onClick={onCancel} className="btn btn-ghost btn-sm">✕</button>
+          <button onClick={onCancel} className="btn btn-ghost btn-sm">x</button>
         </div>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-          Are you sure you want to delete <strong style={{ color: 'var(--text-primary)' }}>{customer.name}</strong>?
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+          Are you sure you want to delete <strong style={{ color: 'var(--text)' }}>{customer.name}</strong>?
           This action cannot be undone.
         </p>
         <div className="modal-footer">
@@ -49,7 +48,7 @@ function DeleteModal({ customer, onConfirm, onCancel, loading }) {
             Cancel
           </button>
           <button onClick={onConfirm} className="btn btn-danger" disabled={loading}>
-            {loading ? <><div className="spinner" style={{ width: 14, height: 14 }} /> Deleting...</> : '🗑️ Delete'}
+            {loading ? <><div className="spinner" style={{ width: 14, height: 14 }} /> Deleting...</> : 'Delete'}
           </button>
         </div>
       </div>
@@ -174,7 +173,6 @@ export default function CustomerList() {
             <option value="">All Statuses</option>
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
-            <option value="prospect">Prospect</option>
           </select>
 
           {/* Clear button */}
@@ -219,7 +217,6 @@ export default function CustomerList() {
         ) : customers.length === 0 ? (
           /* Empty state */
           <div className="empty-state">
-            <div className="empty-state-icon">👥</div>
             <div className="empty-state-title">
               {search || status ? 'No customers match your filters' : 'No customers yet'}
             </div>
@@ -268,10 +265,10 @@ export default function CustomerList() {
                     <td>
                       <div style={{ display: 'flex', gap: 6, justifyContent: 'flex-end' }}>
                         <Link to={`/customers/${customer.id}`} className="btn btn-ghost btn-sm" title="View">
-                          👁
+                          View
                         </Link>
                         <Link to={`/customers/${customer.id}/edit`} className="btn btn-ghost btn-sm" title="Edit">
-                          ✏️
+                          Edit
                         </Link>
                         <button
                           className="btn btn-ghost btn-sm"
@@ -279,7 +276,7 @@ export default function CustomerList() {
                           onClick={() => setDeleting(customer)}
                           title="Delete"
                         >
-                          🗑️
+                          Delete
                         </button>
                       </div>
                     </td>

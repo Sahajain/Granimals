@@ -25,8 +25,8 @@ class CustomerBase(BaseModel):
     phone: Optional[str] = None
     company: Optional[str] = None
     notes: Optional[str] = None
-    status: Optional[Literal["active", "inactive", "prospect"]] = None
-    # Literal["active", "inactive", "prospect"] means only these 3 values are valid
+    status: Optional[Literal["active", "inactive"]] = None
+    # Literal["active", "inactive"] means only these 2 values are valid
 
 
 # ── Create a New Customer ──────────────────────────────────────────────
@@ -37,7 +37,7 @@ class CustomerCreate(CustomerBase):
     """
     name: str               # Required — must provide a name
     email: EmailStr         # Required — must provide a valid email
-    status: Literal["active", "inactive", "prospect"] = "active"  # Defaults to active
+    status: Literal["active", "inactive"] = "active"  # Defaults to active
 
     @field_validator("name")
     @classmethod

@@ -72,7 +72,9 @@ export default function CustomerForm() {
   // ── Input Handler ─────────────────────────────────────────────────
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+    // For phone number, only allow digits
+    const newValue = name === 'phone' ? value.replace(/\D/g, '') : value;
+    setForm(prev => ({ ...prev, [name]: newValue }));
     // Clear the error for this field as user types
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
@@ -80,12 +82,26 @@ export default function CustomerForm() {
   // ── Client-side Validation ────────────────────────────────────────
   const validate = () => {
     const newErrors = {};
-    if (!form.name.trim())  newErrors.name  = 'Name is required';
-    if (!form.email.trim()) newErrors.email = 'Email is required';
-    else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = 'Enter a valid email';
-    if (form.phone && !/^[\d\s\+\-\(\)]+$/.test(form.phone)) {
-      newErrors.phone = 'Enter a valid phone number';
+    
+    // Name validation
+    if (!form.name.trim()) {
+      newErrors.name = 'Name is required';
+    } else if (form.name.trim().length < 3) {
+      newErrors.name = 'Name must be at least 3 characters';
     }
+
+    // Email validation
+    if (!form.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(form.email.trim())) {
+      newErrors.email = 'Enter a valid email address';
+    }
+
+    // Phone validation
+    if (form.phone && !/^\d{10}$/.test(form.phone)) {
+      newErrors.phone = 'Phone number must be exactly 10 digits';
+    }
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;  // true = valid
   };
@@ -169,12 +185,11 @@ export default function CustomerForm() {
                 className={`form-input ${errors.name ? 'error' : ''}`}
                 type="text"
                 name="name"
-                placeholder="John Doe"
                 value={form.name}
                 onChange={handleChange}
                 autoFocus
               />
-              {errors.name && <span className="form-error">⚠ {errors.name}</span>}
+              {errors.name && <span className="form-error">{errors.name}</span>}
             </div>
 
             <div className="form-group">
@@ -185,11 +200,10 @@ export default function CustomerForm() {
                 className={`form-input ${errors.email ? 'error' : ''}`}
                 type="email"
                 name="email"
-                placeholder="john@example.com"
                 value={form.email}
                 onChange={handleChange}
               />
-              {errors.email && <span className="form-error">⚠ {errors.email}</span>}
+              {errors.email && <span className="form-error">{errors.email}</span>}
             </div>
           </div>
 
@@ -201,11 +215,11 @@ export default function CustomerForm() {
                 className={`form-input ${errors.phone ? 'error' : ''}`}
                 type="tel"
                 name="phone"
-                placeholder="+91 98765 43210"
                 value={form.phone}
                 onChange={handleChange}
+                maxLength={10}
               />
-              {errors.phone && <span className="form-error">⚠ {errors.phone}</span>}
+              {errors.phone && <span className="form-error">{errors.phone}</span>}
             </div>
 
             <div className="form-group">
@@ -214,7 +228,6 @@ export default function CustomerForm() {
                 className="form-input"
                 type="text"
                 name="company"
-                placeholder="Acme Corporation"
                 value={form.company}
                 onChange={handleChange}
               />
@@ -232,7 +245,6 @@ export default function CustomerForm() {
             >
               <option value="active">Active</option>
               <option value="inactive">Inactive</option>
-              <option value="prospect">Prospect</option>
             </select>
           </div>
 
@@ -264,7 +276,7 @@ export default function CustomerForm() {
             <button type="submit" className="btn btn-primary" disabled={loading}>
               {loading
                 ? <><div className="spinner" style={{ width: 16, height: 16 }} /> Saving...</>
-                : isEditing ? '💾 Save Changes' : '+ Create Customer'
+                : isEditing ? 'Save Changes' : 'Create Customer'
               }
             </button>
           </div>

@@ -40,15 +40,14 @@ export default function Login() {
   if (user) return <Navigate to="/customers" replace />;
 
   // ── Generic input handler ─────────────────────────────────────────
-  // One handler for all inputs — uses input's name attribute
   const handleChange = (e) => {
-    setError('');  // Clear error on any change
+    setError('');
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   // ── Submit ────────────────────────────────────────────────────────
   const handleSubmit = async (e) => {
-    e.preventDefault();  // Prevent default browser form submission
+    e.preventDefault();
     setError('');
     setLoading(true);
 
@@ -58,7 +57,6 @@ export default function Login() {
         toast.success('Welcome back!');
         navigate('/customers');
       } else {
-        // Register
         if (!form.full_name.trim()) {
           setError('Full name is required'); return;
         }
@@ -72,7 +70,6 @@ export default function Login() {
         setForm(prev => ({ ...prev, password: '', full_name: '' }));
       }
     } catch (err) {
-      // Extract error message from axios error
       const msg = err.response?.data?.detail || 'Something went wrong. Try again.';
       setError(Array.isArray(msg) ? msg[0]?.msg : msg);
     } finally {
@@ -86,51 +83,46 @@ export default function Login() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: 'var(--bg-base)',
-      padding: 'var(--space-4)',
+      background: 'var(--bg)',
+      padding: '1.5rem',
     }}>
-      {/* Background gradient glow */}
-      <div style={{
-        position: 'fixed', inset: 0, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99,102,241,0.15), transparent)',
-      }} />
+      <div style={{ width: '100%', maxWidth: 400 }}>
 
-      <div style={{ width: '100%', maxWidth: 420, position: 'relative' }}>
-        {/* Logo */}
-        <div style={{ textAlign: 'center', marginBottom: 'var(--space-8)' }}>
-          <div style={{
-            width: 56, height: 56, background: 'var(--primary)',
-            borderRadius: 16, display: 'flex', alignItems: 'center',
-            justifyContent: 'center', fontSize: 28, margin: '0 auto var(--space-4)',
-            boxShadow: 'var(--shadow-glow)',
-          }}>🚀</div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Customer Management</h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: 4 }}>
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <h1 style={{ fontSize: '1.375rem', fontWeight: 700, color: 'var(--text)' }}>
+            Customer Management
+          </h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: 4 }}>
             {tab === 'login' ? 'Sign in to your account' : 'Create a new account'}
           </p>
         </div>
 
         {/* Card */}
-        <div className="card" style={{ padding: 'var(--space-8)' }}>
+        <div className="card" style={{ padding: '2rem' }}>
+
           {/* Tabs */}
           <div style={{
-            display: 'flex', background: 'var(--bg-elevated)',
-            borderRadius: 'var(--radius-sm)', padding: 4,
-            marginBottom: 'var(--space-6)',
+            display: 'flex',
+            borderBottom: '1px solid var(--border)',
+            marginBottom: '1.5rem',
           }}>
             {['login', 'register'].map(t => (
               <button
                 key={t}
                 onClick={() => { setTab(t); setError(''); }}
                 style={{
-                  flex: 1, padding: '8px 0',
-                  borderRadius: 'calc(var(--radius-sm) - 2px)',
-                  border: 'none', fontSize: '0.875rem', fontWeight: 500,
-                  background: tab === t ? 'var(--bg-surface)' : 'transparent',
-                  color: tab === t ? 'var(--text-primary)' : 'var(--text-secondary)',
-                  boxShadow: tab === t ? 'var(--shadow-sm)' : 'none',
-                  transition: 'all var(--transition)',
+                  flex: 1,
+                  padding: '0.5rem 0',
+                  border: 'none',
+                  background: 'none',
+                  fontSize: '0.875rem',
+                  fontWeight: 500,
+                  color: tab === t ? 'var(--primary)' : 'var(--text-muted)',
+                  borderBottom: tab === t ? '2px solid var(--primary)' : '2px solid transparent',
+                  marginBottom: '-1px',
                   cursor: 'pointer',
+                  transition: 'color 150ms ease',
                   textTransform: 'capitalize',
                 }}
               >
@@ -139,21 +131,23 @@ export default function Login() {
             ))}
           </div>
 
-          {/* Error Banner */}
+          {/* Error */}
           {error && (
             <div style={{
-              background: 'var(--danger-light)', border: '1px solid var(--danger)',
-              color: '#991b1b', borderRadius: 'var(--radius-sm)',
-              padding: 'var(--space-3) var(--space-4)',
-              fontSize: '0.875rem', marginBottom: 'var(--space-4)',
-              display: 'flex', gap: 8, alignItems: 'flex-start',
+              background: 'var(--danger-light)',
+              border: '1px solid #fca5a5',
+              color: '#b91c1c',
+              borderRadius: 'var(--radius-md)',
+              padding: '0.625rem 0.875rem',
+              fontSize: '0.875rem',
+              marginBottom: '1rem',
             }}>
-              <span>⚠️</span> {error}
+              {error}
             </div>
           )}
 
           {/* Form */}
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {tab === 'register' && (
               <div className="form-group">
                 <label className="form-label">Full Name</label>
@@ -161,7 +155,6 @@ export default function Login() {
                   className="form-input"
                   type="text"
                   name="full_name"
-                  placeholder="John Doe"
                   value={form.full_name}
                   onChange={handleChange}
                   required
@@ -171,12 +164,11 @@ export default function Login() {
             )}
 
             <div className="form-group">
-              <label className="form-label">Email Address</label>
+              <label className="form-label">Email</label>
               <input
                 className="form-input"
                 type="email"
                 name="email"
-                placeholder="you@example.com"
                 value={form.email}
                 onChange={handleChange}
                 required
@@ -190,31 +182,35 @@ export default function Login() {
                 className="form-input"
                 type="password"
                 name="password"
-                placeholder={tab === 'register' ? 'At least 8 characters' : '••••••••'}
                 value={form.password}
                 onChange={handleChange}
                 required
                 minLength={tab === 'register' ? 8 : undefined}
               />
+              {tab === 'register' && (
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  At least 8 characters
+                </span>
+              )}
             </div>
 
             <button
               type="submit"
               className="btn btn-primary btn-lg w-full"
               disabled={loading}
-              style={{ marginTop: 'var(--space-2)' }}
+              style={{ marginTop: '0.25rem' }}
             >
               {loading ? (
-                <><div className="spinner" style={{ width: 16, height: 16 }} /> Loading...</>
+                <><div className="spinner" style={{ width: 15, height: 15, borderWidth: 2 }} /> Loading...</>
               ) : (
-                tab === 'login' ? '→ Sign In' : '→ Create Account'
+                tab === 'login' ? 'Sign In' : 'Create Account'
               )}
             </button>
           </form>
         </div>
 
-        <p style={{ textAlign: 'center', color: 'var(--text-tertiary)', fontSize: '0.8rem', marginTop: 'var(--space-4)' }}>
-          Customer Management System © 2026
+        <p style={{ textAlign: 'center', color: 'var(--text-subtle)', fontSize: '0.75rem', marginTop: '1.5rem' }}>
+          Customer Management System
         </p>
       </div>
     </div>
