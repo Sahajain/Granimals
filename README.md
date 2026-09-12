@@ -1,4 +1,4 @@
-# 🚀 Customer Management System
+# Customer Management System
 
 A full-stack web application for managing customers — built as a technical assessment.
 
@@ -6,19 +6,19 @@ A full-stack web application for managing customers — built as a technical ass
 
 ---
 
-## ✨ Features
+## Features
 
 - **Authentication** — JWT-based login & registration with bcrypt password hashing
 - **Customer CRUD** — Create, Read, Update, Delete customer records
 - **Search & Filter** — Live search by name/email/company, filter by status
 - **Pagination** — Efficient server-side pagination
 - **Role-Based Access** — Admin and User roles (RBAC)
-- **Responsive UI** — Dark-themed React frontend with modern design system
+- **Responsive UI** — Light-themed React frontend with modern design system
 - **27 Tests** — Full backend test coverage with pytest
 
 ---
 
-## 🏗️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -32,7 +32,7 @@ A full-stack web application for managing customers — built as a technical ass
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 customer-management/
@@ -67,7 +67,7 @@ customer-management/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Python 3.12+
@@ -121,9 +121,9 @@ npm run dev
 ```
 
 #### 4. Access the app
-- 🎨 **Frontend:** http://localhost:4011
-- ⚙️ **Backend API:** http://localhost:4002
-- 📖 **API Docs (Swagger):** http://localhost:4002/docs
+- **Frontend:** http://localhost:4011
+- **Backend API:** http://localhost:4002
+- **API Docs (Swagger):** http://localhost:4002/docs
 
 ---
 
@@ -144,7 +144,7 @@ docker compose up
 
 ---
 
-## 🧪 Running Tests
+## Running Tests
 
 ```bash
 cd backend
@@ -164,7 +164,7 @@ pytest tests/ -v --cov=app --cov-report=term-missing
 
 ---
 
-## 🔌 API Reference
+## API Reference
 
 ### Authentication
 | Method | Endpoint | Description |
@@ -186,11 +186,11 @@ pytest tests/ -v --cov=app --cov-report=term-missing
 - `page` — Page number (default: 1)
 - `size` — Items per page (default: 10, max: 100)
 - `search` — Search by name, email, or company
-- `status` — Filter by `active`, `inactive`, or `prospect`
+- `status` — Filter by `active` or `inactive`
 
 ---
 
-## ⚙️ Environment Variables
+## Environment Variables
 
 ### Backend (`backend/.env`)
 ```ini
@@ -207,7 +207,7 @@ VITE_API_URL=http://localhost:4002
 
 ---
 
-## 📐 Architecture Decisions
+## Architecture Decisions
 
 **Why FastAPI?**
 FastAPI generates OpenAPI docs automatically, has excellent type safety via Pydantic, and is one of the fastest Python frameworks available.
@@ -226,6 +226,6 @@ Tests use an in-memory SQLite DB — no PostgreSQL installation needed in CI, ea
 
 ---
 
-## 👤 Author
+## Author
 
 Built for Full Stack Developer Technical Assessment.
