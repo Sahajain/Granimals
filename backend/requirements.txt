@@ -14,7 +14,7 @@ psycopg2-binary==2.9.9
 alembic==1.13.3
 
 # Data validation — makes sure incoming data is the right type/format
-pydantic==2.9.2
+pydantic[email]==2.9.2
 pydantic-settings==2.5.2
 
 # Password hashing — never store plain text passwords!
